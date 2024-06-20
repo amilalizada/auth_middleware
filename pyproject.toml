@@ -1,0 +1,10 @@
+[tool.poetry]
+name = "auth_middleware"
+version = "0.1.0"
+description = ""
+authors = ["Amil <amilalizada@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+fastapi = "^0.111.0"
+aiohttp = "^3.9.5"
