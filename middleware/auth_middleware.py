@@ -4,13 +4,18 @@ from starlette.middleware.base import BaseHTTPMiddleware, RequestResponseEndpoin
 from middleware.client import Client
 
 class AuthMiddleware(BaseHTTPMiddleware):
-    def __init__(self, app, validation_service_url: str, timeout: int = 10):
+    def __init__(self, app, validation_service_url: str, location: str, key: str, timeout: int = 10):
         super().__init__(app)
         self.validation_service_url = validation_service_url
         self.timeout = timeout
+        self.location = location
+        self.key = key
 
     async def dispatch(self, request: Request, call_next: RequestResponseEndpoint) -> Response:
-        token = request.headers.get("Authorization") or request.cookies.get("access_token")
+        if self.location == "header":
+            token = request.headers.get("Authorization")
+        elif self.location == "cookie":
+            token = request.cookies.get(self.key)
         if token is None:
             return Response(content={"status_code": 401, "message": "Unauthorized"}, status_code=401)
         custom_headers = dict(request.headers)
@@ -24,6 +29,6 @@ class AuthMiddleware(BaseHTTPMiddleware):
             return Response(content={"status_code": 401, "message": "Unauthorized"}, status_code=401)
         
         response = await call_next(request)
-        response.set_cookie(key="access_token", value=client.cooked_value, httponly=True)
+        response.set_cookie(key=self.key, value=client.cooked_value, httponly=True)
                 
         return response
