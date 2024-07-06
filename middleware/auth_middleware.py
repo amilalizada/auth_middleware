@@ -18,17 +18,15 @@ class AuthMiddleware(BaseHTTPMiddleware):
             token = request.cookies.get(self.key)
         if token is None:
             return Response(content={"status_code": 401, "message": "Unauthorized"}, status_code=401)
-        custom_headers = dict(request.headers)
-        custom_headers["Authorization"] = token
-        if not token.startswith("Bearer "):
-            token = f"Bearer {token}"
-
+        if self.location == "header":
+            custom_headers = dict(request.headers)
+            custom_headers["Authorization"] = token
+        elif self.location == "cookie":
+            response.set_cookie(key=self.key, value=client.cooked_value, httponly=True)
         client = Client(url=self.validation_service_url, headers=custom_headers, timeout=self.timeout)
         check_result = await client.check()
         if not check_result:
             return Response(content={"status_code": 401, "message": "Unauthorized"}, status_code=401)
-        
         response = await call_next(request)
-        response.set_cookie(key=self.key, value=client.cooked_value, httponly=True)
-                
+        
         return response
