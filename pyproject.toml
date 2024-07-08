@@ -4,7 +4,22 @@ version = "0.1.0"
 description = ""
 authors = ["Amil <amilalizada@gmail.com>"]
 
+homepage = "https://github.com/amilalizada/auth_middleware"
+repository = "https://github.com/amilalizada/auth_middleware"
+classifiers = [
+    "Intended Audience :: Developers",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3 :: Only",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
 [tool.poetry.dependencies]
 python = "^3.10"
 fastapi = "^0.111.0"
-aiohttp = "^3.9.5"
+aiohttp = ">=3.8.6,<3.9.5"
