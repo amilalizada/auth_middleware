@@ -1,4 +1,5 @@
 import json
+from http import HTTPStatus
 from fastapi import Request, Response
 from starlette.middleware.base import BaseHTTPMiddleware, RequestResponseEndpoint
 from middleware.client import Client
@@ -18,7 +19,7 @@ class AuthMiddleware(BaseHTTPMiddleware):
             raise ValueError(f"Location {location} is not supported")
 
     async def dispatch(self, request: Request, call_next: RequestResponseEndpoint) -> Response:
-        error_msg = {"message": "Unauthorized"}
+        error_msg = {"message": HTTPStatus.UNAUTHORIZED.phrase}
         if self.location == LocationEnum.HEADER.value:
             token = request.headers.get("Authorization")
         elif self.location == LocationEnum.COOKIE.value:
