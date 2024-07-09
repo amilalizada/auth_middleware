@@ -2,5 +2,5 @@ from enum import Enum
 
 
 class LocationEnum(str, Enum):
-    header = "header"
-    cookie = "cookie"
+    HEADER = "header"
+    COOKIE = "cookie"

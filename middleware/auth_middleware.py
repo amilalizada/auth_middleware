@@ -1,4 +1,4 @@
-import aiohttp
+import json
 from fastapi import Request, Response
 from starlette.middleware.base import BaseHTTPMiddleware, RequestResponseEndpoint
 from middleware.client import Client
@@ -18,23 +18,24 @@ class AuthMiddleware(BaseHTTPMiddleware):
             raise ValueError(f"Location {location} is not supported")
 
     async def dispatch(self, request: Request, call_next: RequestResponseEndpoint) -> Response:
-        if self.location == "header":
+        error_msg = {"message": "Unauthorized"}
+        if self.location == LocationEnum.HEADER.value:
             token = request.headers.get("Authorization")
-        elif self.location == "cookie":
+        elif self.location == LocationEnum.COOKIE.value:
             token = request.cookies.get(self.key)
         if token is None:
-            return Response(content={"status_code": 401, "message": "Unauthorized"}, status_code=401)
+            return Response(content=json.dumps(error_msg), status_code=401, headers=({"Content-Type", "application/json"}))
         custom_headers = dict(request.headers)
-        if self.location == "cookie":
-            custom_headers["Authorization"] = f"Bearer {token}"
-        client = Client(url=self.validation_service_url, headers=custom_headers, timeout=self.timeout)
+        if self.location == LocationEnum.COOKIE.value:
+            custom_headers["Authorization"] = token
+        client = Client(url=self.validation_service_url, headers=custom_headers, timeout=self.timeout, location=self.location, key=self.key)
         check_result = await client.check()
         if not check_result:
-            return Response(content={"status_code": 401, "message": "Unauthorized"}, status_code=401)
+            return Response(content=json.dumps(error_msg), status_code=401, headers=({"Content-Type", "application/json"}))
         response = await call_next(request)
-        if self.location == "cookie":
+        if self.location == LocationEnum.COOKIE.value:
             response.set_cookie(key=self.key, value=client.cooked_value, httponly=True)
         else:
-            response.headers["Authorization"] = f"Bearer {client.cooked_value}"
+            response.headers["Authorization"] = client.header_value
         
         return response

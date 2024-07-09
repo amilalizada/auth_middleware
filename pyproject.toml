@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "auth_middleware"
+name = "token_middleware"
 version = "0.1.0"
 description = ""
 authors = ["Amil <amilalizada@gmail.com>"]
@@ -19,6 +19,9 @@ classifiers = [
     "Operating System :: OS Independent",
 ]
 
+packages = [
+    { include = "middleware", from = "." },
+]
 [tool.poetry.dependencies]
 python = "^3.10"
 fastapi = "^0.111.0"
