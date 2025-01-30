@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "token_middleware"
-version = "0.1.0"
+version = "1.0.0"
 description = ""
 authors = ["Amil <amilalizada@gmail.com>"]
 
@@ -9,9 +9,6 @@ repository = "https://github.com/amilalizada/auth_middleware"
 classifiers = [
     "Intended Audience :: Developers",
     "Programming Language :: Python",
-    "Programming Language :: Python :: 3.7",
-    "Programming Language :: Python :: 3.8",
-    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3 :: Only",
@@ -24,5 +21,13 @@ packages = [
 ]
 [tool.poetry.dependencies]
 python = "^3.10"
-fastapi = "^0.111.0"
 aiohttp = ">=3.8.6,<3.9.5"
+starlette = "^0.45.3"
+fastapi = "^0.115.7"
+
+[tool.poetry.group.dev.dependencies]
+isort = "^6.0.0"
+black = "^25.1.0"
+uvicorn = "^0.34.0"
+flake8 = "^7.1.1"
+
