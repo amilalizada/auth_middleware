@@ -31,4 +31,4 @@ class Client:
                 elif self.location == LocationEnum.HEADER.value:
                     self.header_value = response.headers.get("Authorization")
 
-        return True, await response.json()
+                return True, await response.json()
