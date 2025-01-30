@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 
-from token_middleware.auth_middleware import AuthMiddleware
+from token_middleware.middleware import AuthMiddleware
 
 app = FastAPI()
 app.add_middleware(

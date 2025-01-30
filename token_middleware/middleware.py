@@ -5,7 +5,7 @@ from fastapi import Request, Response
 from starlette.middleware.base import BaseHTTPMiddleware, RequestResponseEndpoint
 
 from token_middleware.client import Client
-
+from typing import Optional, Dict, Any, Any
 from .enums import LocationEnum
 
 error_msg = {"message": HTTPStatus.UNAUTHORIZED.phrase}
@@ -19,6 +19,8 @@ class AuthMiddleware(BaseHTTPMiddleware):
         key: str,
         location: LocationEnum = LocationEnum.HEADER,
         timeout: int = 10,
+        custom_headers: Optional[Dict[Any, Any]] = None,
+        custom_error: Optional[Dict[Any, Any]] = None
     ):
         super().__init__(app)
         LocationEnum.check_location(location)
@@ -26,6 +28,8 @@ class AuthMiddleware(BaseHTTPMiddleware):
         self.timeout = timeout
         self.location = location
         self.key = key
+        self.custom_headers = custom_headers
+        self.custom_error = custom_error
 
     async def dispatch(
         self, request: Request, call_next: RequestResponseEndpoint
@@ -36,26 +40,27 @@ class AuthMiddleware(BaseHTTPMiddleware):
             token = request.cookies.get(self.key)
         if token is None:
             return Response(
-                content=json.dumps(error_msg),
+                content=json.dumps(self.custom_error) if self.custom_error else json.dumps(error_msg),
                 status_code=401,
-                headers=({"Content-Type", "application/json"}),
+                headers={"Content-Type": "application/json"},
             )
-        custom_headers = dict(request.headers)
+        request_headers = dict(request.headers)
+        if self.custom_headers:
+            request_headers.update(self.custom_headers)
         if self.location == LocationEnum.COOKIE.value:
-            custom_headers["Authorization"] = token
+            request_headers["Authorization"] = token
         client = Client(
             url=self.validation_service_url,
-            headers=custom_headers,
+            headers=request_headers,
             timeout=self.timeout,
             location=self.location,
             key=self.key,
         )
-        check_result = await client.check()
-        if not check_result:
+        result, client_response = await client.check()
+        if not result:
             return Response(
-                content=json.dumps(error_msg),
-                status_code=401,
-                headers=({"Content-Type", "application/json"}),
+                content=json.dumps(client_response),
+                headers={"Content-Type": "application/json"},
             )
         response = await call_next(request)
         if self.location == LocationEnum.COOKIE.value:
