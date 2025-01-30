@@ -25,10 +25,10 @@ class Client:
                 ssl=False,
             ) as response:
                 if not response.status == 200:
-                    return False
+                    return False, await response.json()
                 if self.location == LocationEnum.COOKIE.value:
                     self.cooked_value = response.cookies.get(self.key)
                 elif self.location == LocationEnum.HEADER.value:
                     self.header_value = response.headers.get("Authorization")
 
-        return True
+        return True, await response.json()
