@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "token_middleware"
-version = "1.0.2"
+version = "1.0.3"
 description = ""
 authors = ["Amil <amilalizada@gmail.com>"]
 
@@ -16,9 +16,7 @@ classifiers = [
     "Operating System :: OS Independent",
 ]
 
-packages = [
-    { include = "middleware", from = "." },
-]
+
 [tool.poetry.dependencies]
 python = "^3.10"
 starlette = "^0.45.3"
