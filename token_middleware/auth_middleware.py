@@ -4,7 +4,7 @@ from http import HTTPStatus
 from fastapi import Request, Response
 from starlette.middleware.base import BaseHTTPMiddleware, RequestResponseEndpoint
 
-from middleware.client import Client
+from token_middleware.client import Client
 
 from .enums import LocationEnum
 

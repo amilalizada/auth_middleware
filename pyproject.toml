@@ -1,9 +1,10 @@
 [tool.poetry]
 name = "token_middleware"
-version = "1.0.3"
-description = ""
+version = "1.0.4"
+description = "Token Middleware"
 authors = ["Amil <amilalizada@gmail.com>"]
-
+license = "MIT"
+readme = "README.md"
 homepage = "https://github.com/amilalizada/auth_middleware"
 repository = "https://github.com/amilalizada/auth_middleware"
 classifiers = [
@@ -28,4 +29,20 @@ isort = "^6.0.0"
 black = "^25.1.0"
 uvicorn = "^0.34.0"
 flake8 = "^7.1.1"
+
+[build-system]
+requires = ["poetry-core>=1.2.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 88
+
+[tool.isort]
+profile = "black"
+line_length = 100
+multi_line_output = 3
+include_trailing_comma = true
+py_version=39
+skip_glob = [".github/*", ".venv/*", "venv/*", ".vscode/*"]
+skip = [".gitignore", ".md", ".yaml", ".yml", ".lock",".toml"]
 
