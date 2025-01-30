@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "token_middleware"
-version = "1.0.1"
+version = "1.0.2"
 description = ""
 authors = ["Amil <amilalizada@gmail.com>"]
 
@@ -21,9 +21,9 @@ packages = [
 ]
 [tool.poetry.dependencies]
 python = "^3.10"
-aiohttp = ">=3.8.6,<3.9.5"
 starlette = "^0.45.3"
 fastapi = "^0.115.7"
+aiohttp = "^3.11.11"
 
 [tool.poetry.group.dev.dependencies]
 isort = "^6.0.0"
