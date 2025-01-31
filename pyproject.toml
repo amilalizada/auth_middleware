@@ -1,12 +1,12 @@
 [tool.poetry]
-name = "auth-gateway"
-version = "1.1.0"
-description = "Auth Gateway"
+name = "fastapi-auth-gateway"
+version = "1.2.0"
+description = "FastAPI Auth Gateway"
 authors = ["Amil <amilalizada@gmail.com>"]
 license = "MIT"
 readme = "README.md"
-homepage = "https://github.com/amilalizada/auth_middleware"
-repository = "https://github.com/amilalizada/auth_middleware"
+homepage = "https://github.com/amilalizada/fastapi-auth-middleware"
+repository = "https://github.com/amilalizada/fastapi-auth-middleware"
 classifiers = [
     "Intended Audience :: Developers",
     "Programming Language :: Python",
