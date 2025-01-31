@@ -1,19 +1,13 @@
 import json
 from http import HTTPStatus
-from typing import Any, Dict, Optional
+from typing import Any, Dict, List, Optional
 
 from fastapi import Request, Response
 from starlette.middleware.base import BaseHTTPMiddleware, RequestResponseEndpoint
 
-<<<<<<< HEAD:auth_gateway/middleware.py
 from auth_gateway.client import AuthValidationClient
 
 from .enums import AuthLocation
-=======
-from token_middleware.client import Client
-from typing import Optional, Dict, Any, Any, List
-from .enums import LocationEnum
->>>>>>> upstream/main:token_middleware/middleware.py
 
 error_msg = {"message": HTTPStatus.UNAUTHORIZED.phrase}
 
