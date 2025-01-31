@@ -5,8 +5,8 @@ description = "FastAPI Auth Gateway"
 authors = ["Amil <amilalizada@gmail.com>"]
 license = "MIT"
 readme = "README.md"
-homepage = "https://github.com/amilalizada/fastapi-auth-middleware"
-repository = "https://github.com/amilalizada/fastapi-auth-middleware"
+homepage = "https://github.com/amilalizada/fastapi-auth-gateway"
+repository = "https://github.com/amilalizada/fastapi-auth-gateway"
 classifiers = [
     "Intended Audience :: Developers",
     "Programming Language :: Python",

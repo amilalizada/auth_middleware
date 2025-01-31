@@ -22,7 +22,7 @@ You can install the package using `pip`:
 pip install fastapi-auth-gateway
 
 Alternatively, if you prefer to use poetry for package dependencies:
-```sh
+
 poetry shell
 poetry add fastapi-auth-gateway
 ```
