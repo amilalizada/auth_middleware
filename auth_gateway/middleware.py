@@ -1,29 +1,30 @@
 import json
 from http import HTTPStatus
+from typing import Any, Dict, Optional
 
 from fastapi import Request, Response
 from starlette.middleware.base import BaseHTTPMiddleware, RequestResponseEndpoint
 
-from token_middleware.client import Client
-from typing import Optional, Dict, Any, Any
-from .enums import LocationEnum
+from auth_gateway.client import AuthValidationClient
+
+from .enums import AuthLocation
 
 error_msg = {"message": HTTPStatus.UNAUTHORIZED.phrase}
 
 
-class AuthMiddleware(BaseHTTPMiddleware):
+class AuthGateway(BaseHTTPMiddleware):
     def __init__(
         self,
         app,
         validation_service_url: str,
         key: str,
-        location: LocationEnum = LocationEnum.HEADER,
+        location: AuthLocation = AuthLocation.HEADER,
         timeout: int = 10,
         custom_headers: Optional[Dict[Any, Any]] = None,
         custom_error: Optional[Dict[Any, Any]] = None
     ):
         super().__init__(app)
-        LocationEnum.check_location(location)
+        AuthLocation.check_location(location)
         self.validation_service_url = validation_service_url
         self.timeout = timeout
         self.location = location
@@ -34,9 +35,9 @@ class AuthMiddleware(BaseHTTPMiddleware):
     async def dispatch(
         self, request: Request, call_next: RequestResponseEndpoint
     ) -> Response:
-        if self.location == LocationEnum.HEADER.value:
+        if self.location == AuthLocation.HEADER.value:
             token = request.headers.get("Authorization")
-        elif self.location == LocationEnum.COOKIE.value:
+        elif self.location == AuthLocation.COOKIE.value:
             token = request.cookies.get(self.key)
         if token is None:
             return Response(
@@ -47,25 +48,26 @@ class AuthMiddleware(BaseHTTPMiddleware):
         request_headers = dict(request.headers)
         if self.custom_headers:
             request_headers.update(self.custom_headers)
-        if self.location == LocationEnum.COOKIE.value:
+        if self.location == AuthLocation.COOKIE.value:
             request_headers["Authorization"] = token
-        client = Client(
+        
+        auth_client = AuthValidationClient(
             url=self.validation_service_url,
             headers=request_headers,
             timeout=self.timeout,
             location=self.location,
             key=self.key,
         )
-        result, client_response = await client.check()
+        result, client_response = await auth_client.validate_auth()
         if not result:
             return Response(
                 content=json.dumps(client_response),
                 headers={"Content-Type": "application/json"},
             )
         response = await call_next(request)
-        if self.location == LocationEnum.COOKIE.value:
-            response.set_cookie(key=self.key, value=client.cooked_value, httponly=True)
+        if self.location == AuthLocation.COOKIE.value:
+            response.set_cookie(key=self.key, value=auth_client.cooked_value, httponly=True)
         else:
-            response.headers["Authorization"] = client.header_value
+            response.headers["Authorization"] = auth_client.header_value
 
         return response

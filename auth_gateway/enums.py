@@ -1,7 +1,7 @@
 from enum import Enum
 
 
-class LocationEnum(str, Enum):
+class AuthLocation(str, Enum):
     HEADER = "header"
     COOKIE = "cookie"
 
