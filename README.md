@@ -19,12 +19,12 @@ This module provides middleware for verifying authorization tokens from request 
 You can install the package using `pip`:
 
 ```sh
-pip install fastapi_auth_gateway
+pip install fastapi-auth-gateway
 
 Alternatively, if you prefer to use poetry for package dependencies:
 ```sh
 poetry shell
-poetry add fastapi_auth_gateway
+poetry add fastapi-auth-gateway
 ```
 
 # Usage
