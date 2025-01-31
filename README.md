@@ -1,10 +1,14 @@
-# Auth MiddleWare
-This is a module for checking Authorization token from request headers or cookie
+# Auth Middleware
 
-### Installation
+This module provides middleware for verifying authorization tokens from request headers or cookies.
+
+## Installation
+
+You can install the package using `pip`:
+
 ```sh
-pip install token_middleware 
-```
+pip install token_middleware
+
 
 Alternatively, if you prefer to use poetry for package dependencies:
 ```sh

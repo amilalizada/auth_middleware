@@ -1,7 +1,7 @@
 [tool.poetry]
-name = "token_middleware"
+name = "auth_gateway"
 version = "1.0.6"
-description = "Token Middleware"
+description = "Auth Gateway"
 authors = ["Amil <amilalizada@gmail.com>"]
 license = "MIT"
 readme = "README.md"
