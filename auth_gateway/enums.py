@@ -6,6 +6,6 @@ class AuthLocation(str, Enum):
     COOKIE = "cookie"
 
     @classmethod
-    def check_location(cls, location: str):
-        if location not in cls._value2member_map_:
-            raise ValueError(f"Location '{location}' is not supported")
+    def check_location(cls, auth_location: str):
+        if auth_location not in cls._value2member_map_:
+            raise ValueError(f"Auth location '{auth_location}' is not supported")
