@@ -5,7 +5,7 @@ from fastapi import Request, Response
 from starlette.middleware.base import BaseHTTPMiddleware, RequestResponseEndpoint
 
 from token_middleware.client import Client
-from typing import Optional, Dict, Any, Any
+from typing import Optional, Dict, Any, Any, List
 from .enums import LocationEnum
 
 error_msg = {"message": HTTPStatus.UNAUTHORIZED.phrase}
@@ -20,7 +20,8 @@ class AuthMiddleware(BaseHTTPMiddleware):
         location: LocationEnum = LocationEnum.HEADER,
         timeout: int = 10,
         custom_headers: Optional[Dict[Any, Any]] = None,
-        custom_error: Optional[Dict[Any, Any]] = None
+        custom_error: Optional[Dict[Any, Any]] = None,
+        exclude_urls: Optional[List[str]] = None
     ):
         super().__init__(app)
         LocationEnum.check_location(location)
@@ -30,10 +31,13 @@ class AuthMiddleware(BaseHTTPMiddleware):
         self.key = key
         self.custom_headers = custom_headers
         self.custom_error = custom_error
+        self.exclude_urls = exclude_urls
 
     async def dispatch(
         self, request: Request, call_next: RequestResponseEndpoint
     ) -> Response:
+        if request.url.path in self.exclude_urls:
+            return await call_next(request)
         if self.location == LocationEnum.HEADER.value:
             token = request.headers.get("Authorization")
         elif self.location == LocationEnum.COOKIE.value:
