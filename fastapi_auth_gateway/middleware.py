@@ -5,14 +5,14 @@ from typing import Any, Dict, List, Optional
 from fastapi import Request, Response
 from starlette.middleware.base import BaseHTTPMiddleware, RequestResponseEndpoint
 
-from auth_gateway.client import AuthValidationClient
+from fastapi_auth_gateway.client import AuthValidationClient
 
 from .enums import AuthLocation
 
 error_msg = {"message": HTTPStatus.UNAUTHORIZED.phrase}
 
 
-class AuthGateway(BaseHTTPMiddleware):
+class FastAPIAuthGateway(BaseHTTPMiddleware):
     def __init__(
         self,
         app,
