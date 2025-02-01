@@ -37,7 +37,7 @@ class FastAPIAuthGateway(BaseHTTPMiddleware):
     async def dispatch(
         self, request: Request, call_next: RequestResponseEndpoint
     ) -> Response:
-        if request.url.path in self.exclude_urls:
+        if self.exclude_urls and request.url.path in self.exclude_urls:
             return await call_next(request)
         if self.auth_location == AuthLocation.HEADER.value:
             token = request.headers.get("Authorization")
